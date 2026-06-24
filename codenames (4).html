@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>كود نيمز — Codenames</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%23ef5d5d'/><stop offset='.5' stop-color='%23ffd84d'/><stop offset='1' stop-color='%235a98ea'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><g fill='%23fff8e7' stroke='%231b1925' stroke-width='2'><rect x='10' y='14' width='20' height='28' rx='3' transform='rotate(-10 20 28)'/><rect x='22' y='18' width='20' height='28' rx='3' transform='rotate(4 32 32)'/><rect x='34' y='14' width='20' height='28' rx='3' transform='rotate(14 44 28)'/></g></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%23ef5d5d'/><stop offset='.5' stop-color='%23ffd84d'/><stop offset='1' stop-color='%235a98ea'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><g fill='%23fff8e7' stroke='%231b1925' stroke-width='2'><rect x='10' y='14' width='20' height='28' rx='3' transform='rotate(-10 20 28)'/><rect x='22' y='18' width='20' height='28' rx='3' transform='rotate(4 32 32)'/><rect x='34' y='14' width='20' height='28' rx='3' transform='rotate(14 44 28)'/></g></svg>">
+<meta property="og:image" content="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%23ef5d5d'/><stop offset='.5' stop-color='%23ffd84d'/><stop offset='1' stop-color='%235a98ea'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><g fill='%23fff8e7' stroke='%231b1925' stroke-width='2'><rect x='10' y='14' width='20' height='28' rx='3' transform='rotate(-10 20 28)'/><rect x='22' y='18' width='20' height='28' rx='3' transform='rotate(4 32 32)'/><rect x='34' y='14' width='20' height='28' rx='3' transform='rotate(14 44 28)'/></g></svg>">
+
+<meta name="theme-color" content="#ef5d5d">
+<meta property="og:title" content="كود نيمز — Codenames">
+<meta property="og:description" content="العب كود نيمز أونلاين أو محلياً مع الأصدقاء، بالعربية أو الإنجليزية.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Play Codenames online or locally with friends, Arabic or English. Live rooms, smart bots, in-game chat." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&family=Rubik:wght@500;700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Cairo"', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          sans: ['"Rubik"', '"Cairo"', 'system-ui', 'sans-serif'],
+        },
+        colors: {
+          background: 'var(--bg)',
+          foreground: 'var(--fg)',
+          card: 'var(--card)',
+          'card-foreground': 'var(--card-fg)',
+          muted: 'var(--muted)',
+          'muted-foreground': 'var(--muted-fg)',
+          border: 'var(--border)',
+          primary: { DEFAULT: 'var(--primary)', foreground: 'var(--primary-fg)' },
+          secondary: { DEFAULT: 'var(--secondary)', foreground: 'var(--secondary-fg)' },
+          accent: { DEFAULT: 'var(--accent)', foreground: 'var(--accent-fg)' },
+          destructive: { DEFAULT: '#dc2626', foreground: '#ffffff' },
+          'team-red': { DEFAULT:'#f25c5c', foreground:'#ffffff', soft:'#ffe1e1' },
+          'team-blue': { DEFAULT:'#5a98ea', foreground:'#ffffff', soft:'#dceaff' },
+          sunny: '#ffe066',
+        },
+        boxShadow: {
+          pop: '0 6px 0 0 rgba(0,0,0,0.08)',
+          'pop-lg': '0 10px 0 0 rgba(0,0,0,0.12)',
+          card: '0 4px 18px -8px rgba(0,0,0,0.15)',
+        },
+        keyframes: {
+          float: { '0%,100%': {transform:'translateY(0)'}, '50%': {transform:'translateY(-6px)'} },
+          wiggle: { '0%,100%': {transform:'rotate(0)'}, '50%': {transform:'rotate(-8deg)'} },
+          pop: { '0%': {transform:'scale(.92)', opacity:'0'}, '100%': {transform:'scale(1)', opacity:'1'} },
+        },
+        animation: {
+          float: 'float 3s ease-in-out infinite',
+          wiggle: 'wiggle 1.2s ease-in-out infinite',
+          pop: 'pop .25s ease-out',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root{
+    --bg:#fcfbf8; --fg:#1f2236; --card:#ffffff; --card-fg:#1f2236;
+    --muted:#f1efe9; --muted-fg:#6b7080; --border:#e6e3da;
+    --primary:#ef5d5d; --primary-fg:#ffffff;
+    --secondary:#4ec9bf; --secondary-fg:#0d3a36;
+    --accent:#ffd84d; --accent-fg:#3a2e00;
+  }
+  .dark{
+    --bg:#13141d; --fg:#f2efe7; --card:#1d1f2c; --card-fg:#f2efe7;
+    --muted:#262838; --muted-fg:#a3a8bb; --border:#2f3245;
+    --primary:#ef5d5d; --primary-fg:#fff;
+    --secondary:#4ec9bf; --secondary-fg:#062523;
+    --accent:#ffd84d; --accent-fg:#3a2e00;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--fg);font-family:"Cairo","Rubik","Plus Jakarta Sans",system-ui,sans-serif}
+  .font-display{font-family:"Cairo","Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:-.005em;font-weight:800}
+  .text-stroke{ -webkit-text-stroke: 1px rgba(0,0,0,.08) }
+  .dark .text-stroke{ -webkit-text-stroke: 1px rgba(255,255,255,.1) }
+  /* Card flip */
+  .card-flip{ perspective: 800px }
+  .card-flip__inner{ position:relative; width:100%; height:100%; transition: transform .55s cubic-bezier(.5,1.6,.4,1); transform-style: preserve-3d; }
+  .card-flip__inner--flipped{ transform: rotateY(180deg) }
+  .card-flip__face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius: 14px; display:flex; align-items:center; justify-content:center; padding: 6px; }
+  /* Realistic card styling */
+  .card-flip{ perspective: 1200px; }
+  .card-flip__face{
+    border-radius: 14px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.6) inset,
+      0 -2px 0 rgba(0,0,0,.06) inset,
+      0 10px 18px -10px rgba(20,20,40,.30),
+      0 3px 6px -3px rgba(20,20,40,.18);
+    transition: transform .25s cubic-bezier(.4,1.6,.5,1), box-shadow .25s;
+  }
+  .card-front{
+    background: radial-gradient(ellipse at top, #ffffff 0%, #fbf6e8 55%, #f1e7cb 100%);
+    color:#2a2235; border:1px solid #d9cda6; font-weight:800; overflow:hidden;
+  }
+  .card-front::before{
+    content:""; position:absolute; inset:6px; border-radius:9px;
+    border:1px solid rgba(120,90,30,.22); pointer-events:none;
+    background: repeating-linear-gradient(45deg, rgba(120,90,30,.025) 0 2px, transparent 2px 6px);
+  }
+  .dark .card-front{
+    background: radial-gradient(ellipse at top, #3d3724 0%, #2e2a1a 60%, #221f12 100%);
+    color:#ffe9a8; border-color:#5b5230;
+  }
+  .dark .card-front::before{ border-color: rgba(255,220,140,.18); }
+  .card-front__word{
+    font-size: clamp(.85rem, 2.3vw, 1.25rem); text-align:center; line-height:1.15;
+    font-family:"Cairo","Plus Jakarta Sans",sans-serif; font-weight:800;
+    letter-spacing:-.01em; text-shadow: 0 1px 0 rgba(255,255,255,.7); z-index:1;
+  }
+  .dark .card-front__word{ text-shadow: 0 1px 0 rgba(0,0,0,.4); }
+  .card-front__corner{ position:absolute; opacity:.5; z-index:1; }
+  .card-front__corner--tl{ top:6px; inset-inline-start:6px }
+  .card-front__corner--br{ bottom:6px; inset-inline-end:6px }
+  .card-flip__face--back{ transform: rotateY(180deg) }
+  .card-face{ font-weight:900; border:1px solid; overflow:hidden; }
+  .card-face::after{
+    content:""; position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,0) 40%, rgba(0,0,0,.2));
+    pointer-events:none;
+  }
+  .card-face__word{
+    font-size: clamp(.78rem,2vw,1.12rem); text-align:center; line-height:1.1; padding: 4px 6px;
+    font-family:"Cairo","Plus Jakarta Sans",sans-serif; font-weight:900; letter-spacing:-.01em;
+    z-index:1; position:relative; text-shadow: 0 1px 2px rgba(0,0,0,.3);
+  }
+  .card-face--red{ background: linear-gradient(160deg, #ff7676 0%, #ef4d4d 50%, #c93b3b 100%); color:#fff; border-color:#a52929; }
+  .card-face--blue{ background: linear-gradient(160deg, #79b1ff 0%, #4f8de8 50%, #2f6dc7 100%); color:#fff; border-color:#23509a; }
+  .card-face--neutral{ background: linear-gradient(160deg, #fff1c8 0%, #efd494 50%, #c9a958 100%); color:#4a3608; border-color:#a8862e; }
+  .card-face--assassin{ background: radial-gradient(circle at 30% 20%, #3a3650 0%, #1b1925 55%, #07060c 100%); color:#ffe066; border-color:#000; }
+
+  /* Hover shine sweep */
+  .card-front--hot{ position:relative; }
+  .card-front--hot::after{
+    content:""; position:absolute; inset:0; border-radius:14px;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%);
+    transform: translateX(-120%); transition: transform .6s ease;
+    pointer-events:none; z-index:2;
+  }
+  .card-front--hot:hover::after{ transform: translateX(120%); }
+  .card-front--hot:hover{
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.7) inset,
+      0 14px 28px -10px rgba(20,20,40,.40),
+      0 5px 10px -4px rgba(20,20,40,.22);
+  }
+  .card-front--hot:active{ transform: translateY(0) scale(.98); }
+
+  /* Flip animation */
+  @keyframes cardReveal {
+    0%{ transform: rotateY(0) scale(1); }
+    50%{ transform: rotateY(90deg) scale(1.08); }
+    100%{ transform: rotateY(180deg) scale(1); }
+  }
+  .card-flip__inner--flipped{ animation: cardReveal .65s cubic-bezier(.5,1.4,.4,1) both; }
+
+  /* Board shake on assassin */
+  @keyframes shakeX {
+    0%,100%{ transform: translateX(0); }
+    20%,60%{ transform: translateX(-8px); }
+    40%,80%{ transform: translateX(8px); }
+  }
+  .shake{ animation: shakeX .55s ease-in-out; }
+
+  /* Confetti */
+  .confetti-wrap{ position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden; }
+  .confetti-piece{
+    position:absolute; top:-20px; width:10px; height:14px; border-radius:2px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall { to{ transform: translateY(110vh) rotate(720deg); opacity:.85; } }
+  .ring-team-red{ --tw-ring-color:#c93b3b }
+  .ring-team-blue{ --tw-ring-color:#3a78d6 }
+  /* scrollbar */
+  ::-webkit-scrollbar{width:8px;height:8px} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+</style>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.45.4",
+    "lucide-react": "https://esm.sh/lucide-react@0.475.0?external=react"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script>
+window.__cnFx = {
+  confetti(){
+    const wrap = document.createElement('div'); wrap.className = 'confetti-wrap';
+    const colors = ['#ef5d5d','#5a98ea','#ffd84d','#4ec9bf','#ff7ab6','#a370ff'];
+    for(let i=0;i<140;i++){
+      const p = document.createElement('div'); p.className = 'confetti-piece';
+      p.style.left = Math.random()*100+'vw';
+      p.style.background = colors[i%colors.length];
+      p.style.animationDuration = (2.2 + Math.random()*1.8)+'s';
+      p.style.animationDelay = (Math.random()*0.4)+'s';
+      p.style.transform = `rotate(${Math.random()*360}deg)`;
+      wrap.appendChild(p);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(()=>wrap.remove(), 4500);
+  },
+  shake(){
+    document.querySelectorAll('.grid.grid-cols-5').forEach(el=>{
+      el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
+    });
+  }
+};
+</script>
+
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useMemo, useRef, useCallback, createContext, useContext } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createClient } from '@supabase/supabase-js';
+import {
+  Globe, Gamepad2, Users, Layers, ShieldCheck, Sparkles, BookOpen, ArrowRight, KeyRound,
+  Settings as SettingsIcon, X, Sun, Moon, Languages, Volume2, VolumeX,
+  Home, Copy, Check, Trophy, LogOut, Play, RefreshCw, Eye, EyeOff, Bot,
+  ArrowLeft, Send, SkipForward, Hourglass, Megaphone, ScrollText, Shield, Skull,
+  MessagesSquare, Cat, Bird, Bug, Crown, Ghost, Rocket, Star, Flame, Heart, Zap, Compass,
+} from 'lucide-react';
+
+// Codenames cards icon — three overlapping agent cards in red / neutral / blue.
+function CardsIcon({ className = '', ...props }) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} fill="none" {...props}>
+      <g stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round">
+        <rect x="9"  y="14" width="20" height="28" rx="3"
+          transform="rotate(-12 19 28)" fill="#ef5d5d" fillOpacity=".95"/>
+        <rect x="22" y="16" width="20" height="30" rx="3"
+          transform="rotate(3 32 31)"   fill="#ffe9a8" fillOpacity=".98"/>
+        <rect x="34" y="14" width="20" height="28" rx="3"
+          transform="rotate(14 44 28)"  fill="#5a98ea" fillOpacity=".95"/>
+      </g>
+      {/* tiny "agent" marks on the middle card */}
+      <g fill="currentColor" opacity=".55">
+        <circle cx="32" cy="26" r="1.6"/>
+        <rect   x="28" y="32" width="8" height="1.6" rx="0.8"/>
+        <rect   x="29" y="35" width="6" height="1.4" rx="0.7"/>
+      </g>
+    </svg>
+  );
+}
+// Backward-compat alias so old <Brain/> references keep rendering the cards icon.
+const Brain = CardsIcon;
+
+// ============ Supabase ============
+const SUPABASE_URL = "https://kmjhmygvjacwdxrpgjlp.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttamhteWd2amFjd2R4cnBnamxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNDMxODYsImV4cCI6MjA5NzcxOTE4Nn0.40CP6Mj8PlUfg4oviWUrNPWX1G6gYhaiTdKwRXDZ-w0";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession:false, autoRefreshToken:false } });
+
+// ============ Words ============
+const WORD_LIST_AR = ["بحر","جبل","نهر","صحراء","غابة","وادي","جزيرة","بركان","شمس","قمر","نجمة","سحابة","مطر","ثلج","ريح","برق","أسد","نمر","فيل","حصان","ذئب","ثعلب","غزال","صقر","نسر","حمامة","بومة","أفعى","حوت","قرش","دلفين","سلحفاة","ملك","أمير","فارس","قلعة","تاج","سيف","درع","رمح","كتاب","قلم","ورقة","مكتبة","مدرسة","جامعة","معلم","طالب","طبيب","مهندس","طيار","بحار","جندي","شرطي","إطفائي","صياد","ساعة","هاتف","حاسوب","كاميرا","مفتاح","مصباح","مرآة","نافذة","باب","جسر","برج","نفق","طريق","ميناء","مطار","محطة","سيارة","قطار","طائرة","سفينة","دراجة","صاروخ","غواصة","مركبة","ذهب","فضة","ماس","لؤلؤ","نحاس","حديد","كنز","خاتم","قهوة","شاي","عسل","خبز","تفاح","عنب","رمان","ليمون","وردة","ياسمين","نخلة","زيتون","قمح","صبار","بستان","حقل","نار","ماء","هواء","تراب","رماد","دخان","بخار","جليد","حلم","ذكرى","خيال","سر","لغز","حكاية","أسطورة","قصة","عاصفة","زلزال","فيضان","إعصار","موجة","صدى","ظل","هدوء","قلب","عين","يد","قدم","ظهر","كتف","إصبع","دماغ","مدينة","قرية","حي","شارع","ساحة","حديقة","متحف","سوق","نقود","بنك","تجارة","سفر","رحلة","خريطة","بوصلة","حقيبة","موسيقى","لحن","طبل","ناي","عود","إيقاع","أغنية","رقص"];
+const WORD_LIST_EN = ["Apple","River","Mountain","Cloud","Star","Moon","Sun","Ocean","Forest","Desert","Island","Volcano","Storm","Rain","Snow","Wind","Lion","Tiger","Eagle","Shark","Whale","Wolf","Fox","Bear","Snake","Horse","Falcon","Dolphin","Turtle","Owl","Cat","Dog","King","Queen","Knight","Castle","Crown","Sword","Shield","Spear","Book","Pen","Paper","Library","School","Teacher","Student","Class","Doctor","Engineer","Pilot","Sailor","Soldier","Police","Fireman","Hunter","Clock","Phone","Laptop","Camera","Key","Lamp","Mirror","Window","Door","Bridge","Tower","Tunnel","Road","Port","Airport","Station","Car","Train","Plane","Ship","Bike","Rocket","Sub","Truck","Gold","Silver","Diamond","Pearl","Copper","Iron","Treasure","Ring","Coffee","Tea","Honey","Bread","Grape","Lemon","Orange","Rose","Olive","Palm","Wheat","Cactus","Garden","Field","Fire","Water","Air","Earth","Ash","Smoke","Steam","Ice","Dream","Memory","Secret","Legend","Story","Riddle","Echo","Shadow","Wave","Flood","Hurricane","Tornado","Sound","Light","Dark","Heart","Eye","Hand","Foot","Back","Finger","Brain","Voice","City","Village","Street","Park","Plaza","Museum","Market","House","Money","Bank","Trade","Travel","Journey","Map","Compass","Bag","Music","Drum","Flute","Guitar","Beat","Song","Dance","Stage"];
+
+// ============ Game logic ============
+const isAr = (l) => (l ?? "ar") === "ar";
+const teamName = (t, l) => isAr(l) ? (t === "red" ? "الفريق الأحمر" : "الفريق الأزرق") : (t === "red" ? "Red Team" : "Blue Team");
+const shuffle = (arr) => { const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+
+function createGame(lang="ar"){
+  const list = lang === "en" ? WORD_LIST_EN : WORD_LIST_AR;
+  const words = shuffle(list).slice(0,25);
+  const startingTeam = Math.random()<0.5 ? "red":"blue";
+  const startCount=9, secondCount=8;
+  const second = startingTeam==="red" ? "blue":"red";
+  const types=[];
+  for(let i=0;i<startCount;i++) types.push(startingTeam);
+  for(let i=0;i<secondCount;i++) types.push(second);
+  for(let i=0;i<7;i++) types.push("neutral");
+  types.push("assassin");
+  const st = shuffle(types);
+  const cards = words.map((w,i)=>({word:w, type:st[i], revealed:false}));
+  const startMsg = isAr(lang) ? `يبدأ ${teamName(startingTeam,"ar")}! على القائد إعطاء أول تلميح.` : `${teamName(startingTeam,"en")} starts! The spymaster gives the first clue.`;
+  return { cards, startingTeam, turn:startingTeam,
+    redRemaining: startingTeam==="red"?startCount:secondCount,
+    blueRemaining: startingTeam==="blue"?startCount:secondCount,
+    redTotal: startingTeam==="red"?startCount:secondCount,
+    blueTotal: startingTeam==="blue"?startCount:secondCount,
+    winner:null, phase:"clue", clue:null, guessesLeft:0, lang,
+    log:[{kind:"info", text:startMsg, team:startingTeam}] };
+}
+
+function giveClue(state, word, count){
+  if(state.winner || state.phase!=="clue") return state;
+  const clue={word:word.trim(),count,team:state.turn};
+  const text = isAr(state.lang) ? `${teamName(state.turn,"ar")}: «${clue.word}» — ${count}` : `${teamName(state.turn,"en")}: "${clue.word}" — ${count}`;
+  return {...state, phase:"guess", clue, guessesLeft:count+1, log:[{kind:"clue",team:state.turn,text}, ...state.log]};
+}
+
+function revealCard(state, index){
+  if(state.winner || state.phase!=="guess") return state;
+  const card=state.cards[index]; if(card.revealed) return state;
+  const ar=isAr(state.lang);
+  const cards=state.cards.map((c,i)=>i===index?{...c,revealed:true}:c);
+  let {redRemaining,blueRemaining,turn,guessesLeft}=state; let phase=state.phase; let winner=null;
+  const log=[...state.log]; const other = turn==="red"?"blue":"red";
+  if(card.type==="assassin"){
+    winner=other; phase="over";
+    log.unshift({kind:"win",team:winner, text: ar?`${teamName(turn,"ar")} كشف القاتل! فاز ${teamName(winner,"ar")}.`:`${teamName(turn,"en")} hit the assassin! ${teamName(winner,"en")} wins.`});
+    return {...state, cards, winner, phase, clue:null, guessesLeft:0, log};
+  }
+  if(card.type==="red") redRemaining--;
+  else if(card.type==="blue") blueRemaining--;
+  log.unshift({kind:"guess",team:turn, text: ar
+    ? (card.type==="neutral" ? `«${card.word}» محايدة — انتهى دور ${teamName(turn,"ar")}.` : `«${card.word}» لـ${teamName(card.type,"ar")}.`)
+    : (card.type==="neutral" ? `"${card.word}" neutral — ${teamName(turn,"en")}'s turn ends.` : `"${card.word}" belongs to ${teamName(card.type,"en")}.`)});
+  if(redRemaining===0) winner="red"; if(blueRemaining===0) winner="blue";
+  if(winner){ phase="over"; log.unshift({kind:"win",team:winner,text:ar?`فاز ${teamName(winner,"ar")}!`:`${teamName(winner,"en")} wins!`});
+    return {...state, cards, redRemaining, blueRemaining, winner, phase, clue:null, guessesLeft:0, log}; }
+  if(card.type===turn){
+    guessesLeft--;
+    if(guessesLeft<=0){ turn=other; phase="clue";
+      log.unshift({kind:"turn",team:turn,text: ar?`نفدت التخمينات — دور ${teamName(turn,"ar")}.`:`Out of guesses — ${teamName(turn,"en")}'s turn.`});
+      return {...state, cards, redRemaining, blueRemaining, turn, phase, clue:null, guessesLeft:0, log};
+    }
+    return {...state, cards, redRemaining, blueRemaining, guessesLeft, log};
+  }
+  turn=other; phase="clue";
+  log.unshift({kind:"turn",team:turn,text: ar?`دور ${teamName(turn,"ar")} الآن.`:`Now it's ${teamName(turn,"en")}'s turn.`});
+  return {...state, cards, redRemaining, blueRemaining, turn, phase, clue:null, guessesLeft:0, log};
+}
+
+function endTurn(state){
+  if(state.winner || state.phase!=="guess") return state;
+  const ar=isAr(state.lang); const turn = state.turn==="red"?"blue":"red";
+  return {...state, turn, phase:"clue", clue:null, guessesLeft:0,
+    log:[{kind:"turn",team:turn,text: ar?`أنهى ${teamName(state.turn,"ar")} دوره — دور ${teamName(turn,"ar")}.`:`${teamName(state.turn,"en")} ended their turn — ${teamName(turn,"en")}'s turn.`}, ...state.log]};
+}
+
+// ============ Bots ============
+// Category dictionaries — used by the bot spymaster to find a clue that
+// covers as many of its own remaining words as possible.
+const AR_CATEGORIES = {
+  "حيوان": ["أسد","نمر","فيل","حصان","ذئب","ثعلب","غزال","صقر","نسر","حمامة","بومة","أفعى","حوت","قرش","دلفين","سلحفاة"],
+  "طبيعة": ["بحر","جبل","نهر","صحراء","غابة","وادي","جزيرة","بركان","شمس","قمر","نجمة","سحابة","مطر","ثلج","ريح","برق","موجة","صدى","ظل","عاصفة","زلزال","فيضان","إعصار"],
+  "ملكي": ["ملك","أمير","فارس","قلعة","تاج","سيف","درع","رمح"],
+  "علم": ["كتاب","قلم","ورقة","مكتبة","مدرسة","جامعة","معلم","طالب"],
+  "مهنة": ["طبيب","مهندس","طيار","بحار","جندي","شرطي","إطفائي","صياد"],
+  "أداة": ["ساعة","هاتف","حاسوب","كاميرا","مفتاح","مصباح","مرآة","نافذة","باب"],
+  "بناء": ["جسر","برج","نفق","طريق","ميناء","مطار","محطة","قلعة","مدينة","قرية","حي","شارع","ساحة","حديقة","متحف","سوق"],
+  "مركبة": ["سيارة","قطار","طائرة","سفينة","دراجة","صاروخ","غواصة","مركبة"],
+  "كنز": ["ذهب","فضة","ماس","لؤلؤ","نحاس","حديد","كنز","خاتم"],
+  "طعام": ["قهوة","شاي","عسل","خبز","تفاح","عنب","رمان","ليمون"],
+  "نبات": ["وردة","ياسمين","نخلة","زيتون","قمح","صبار","بستان","حقل"],
+  "عنصر": ["نار","ماء","هواء","تراب","رماد","دخان","بخار","جليد"],
+  "خيال": ["حلم","ذكرى","خيال","سر","لغز","حكاية","أسطورة","قصة"],
+  "جسد": ["قلب","عين","يد","قدم","ظهر","كتف","إصبع","دماغ"],
+  "مال": ["نقود","بنك","تجارة","سفر","رحلة","خريطة","بوصلة","حقيبة"],
+  "موسيقى": ["موسيقى","لحن","طبل","ناي","عود","إيقاع","أغنية","رقص"],
+};
+const EN_CATEGORIES = {
+  "Animal": ["Lion","Tiger","Eagle","Shark","Whale","Wolf","Fox","Bear","Snake","Horse","Falcon","Dolphin","Turtle","Owl","Cat","Dog"],
+  "Nature": ["River","Mountain","Cloud","Star","Moon","Sun","Ocean","Forest","Desert","Island","Volcano","Storm","Rain","Snow","Wind","Wave","Flood","Hurricane","Tornado","Echo","Shadow"],
+  "Royal":  ["King","Queen","Knight","Castle","Crown","Sword","Shield","Spear"],
+  "School": ["Book","Pen","Paper","Library","School","Teacher","Student","Class"],
+  "Job":    ["Doctor","Engineer","Pilot","Sailor","Soldier","Police","Fireman","Hunter"],
+  "Tool":   ["Clock","Phone","Laptop","Camera","Key","Lamp","Mirror","Window","Door"],
+  "Build":  ["Bridge","Tower","Tunnel","Road","Port","Airport","Station","City","Village","Street","Park","Plaza","Museum","Market","House","Castle"],
+  "Vehicle":["Car","Train","Plane","Ship","Bike","Rocket","Sub","Truck"],
+  "Treasure":["Gold","Silver","Diamond","Pearl","Copper","Iron","Treasure","Ring"],
+  "Food":   ["Coffee","Tea","Honey","Bread","Grape","Lemon","Orange"],
+  "Plant":  ["Rose","Olive","Palm","Wheat","Cactus","Garden","Field"],
+  "Element":["Fire","Water","Air","Earth","Ash","Smoke","Steam","Ice"],
+  "Story":  ["Dream","Memory","Secret","Legend","Story","Riddle"],
+  "Body":   ["Heart","Eye","Hand","Foot","Back","Finger","Brain","Voice"],
+  "Money":  ["Money","Bank","Trade","Travel","Journey","Map","Compass","Bag"],
+  "Music":  ["Music","Drum","Flute","Guitar","Beat","Song","Dance","Stage"],
+};
+
+function pickClue(state, botTeam){
+  const ar = (state.lang ?? "ar") === "ar";
+  const cats = ar ? AR_CATEGORIES : EN_CATEGORIES;
+  const unrevealed = state.cards.filter(c => !c.revealed);
+  const own       = unrevealed.filter(c => c.type === botTeam).map(c => c.word);
+  const enemy     = unrevealed.filter(c => c.type !== botTeam && c.type !== "assassin").map(c => c.word);
+  const assassin  = unrevealed.filter(c => c.type === "assassin").map(c => c.word);
+
+  let best = null; // { word, hits, risk }
+  for (const [cat, list] of Object.entries(cats)) {
+    const set = new Set(list);
+    const hits   = own.filter(w => set.has(w)).length;
+    if (hits === 0) continue;
+    const eRisk  = enemy.filter(w => set.has(w)).length;
+    const aRisk  = assassin.filter(w => set.has(w)).length;
+    if (aRisk > 0) continue;             // never give a clue that touches the assassin
+    const score  = hits * 10 - eRisk * 4; // prefer many own hits, few enemy collisions
+    if (!best || score > best.score) best = { word: cat, hits, eRisk, score };
+  }
+  if (best) return { word: best.word, count: Math.max(1, Math.min(best.hits, 4)) };
+
+  // Fallback: generic clue with a safe count
+  const pool = ar
+    ? ["إشارة","رمز","لغز","همسة","خيط","كلمة","فكرة","سر","نسيم"]
+    : ["clue","hint","signal","code","spark","trace","echo","wink","vibe"];
+  const word = pool[Math.floor(Math.random() * pool.length)];
+  const remaining = botTeam === "red" ? state.redRemaining : state.blueRemaining;
+  return { word, count: Math.max(1, Math.min(2, remaining)) };
+}
+
+function botAction(state, botTeam, difficulty){
+  if (state.winner || difficulty === "none") return null;
+  if (state.turn !== botTeam) return null;
+
+  if (state.phase === "clue") {
+    const { word, count } = pickClue(state, botTeam);
+    return { type: "clue", word, count };
+  }
+
+  if (state.phase === "guess") {
+    const un = state.cards.map((c,i) => ({ c, i })).filter(x => !x.c.revealed);
+    if (un.length === 0) return { type: "end" };
+    if (state.guessesLeft <= 0) return { type: "end" };
+
+    // The operative MUST guess from words that match the current clue.
+    // Look up the clue word in the same category dictionaries the spymaster
+    // uses, then only pick from unrevealed board words that belong to that
+    // category. This stops the bot from grabbing unrelated own-team words.
+    const ar = (state.lang ?? "ar") === "ar";
+    const cats = ar ? AR_CATEGORIES : EN_CATEGORIES;
+    const clueWord = (state.clue?.word ?? "").trim();
+    const categoryWords = cats[clueWord] ? new Set(cats[clueWord]) : null;
+
+    const inClue = categoryWords
+      ? un.filter(x => categoryWords.has(x.c.word))
+      : [];
+
+    // If we've already used up the intended count, end the turn (no bonus guess
+    // unless we're very confident — and we can't be confident without semantics).
+    const intended = state.clue?.count ?? 1;
+    const used = intended + 1 - state.guessesLeft; // 0-indexed guesses spent
+    if (used >= intended) return { type: "end" };
+
+    if (inClue.length) {
+      if (difficulty === "hard") {
+        // Hard bot prefers its own team's cards from inside the clue category.
+        const ownInClue = inClue.filter(x => x.c.type === botTeam);
+        if (ownInClue.length) {
+          return { type: "guess", index: ownInClue[Math.floor(Math.random()*ownInClue.length)].i };
+        }
+        // No own card in this category — be cautious and bail out.
+        return { type: "end" };
+      }
+      // Easy bot: random pick from the clue category (may be wrong).
+      return { type: "guess", index: inClue[Math.floor(Math.random()*inClue.length)].i };
+    }
+
+    // Clue we don't understand (player-typed online, or fallback clue):
+    // pass the turn rather than blindly grabbing a card. Falls back to a
+    // safe random pick only on easy difficulty.
+    if (difficulty === "hard") return { type: "end" };
+    const safe = un.filter(x => x.c.type !== "assassin");
+    const pool = safe.length ? safe : un;
+    return { type: "guess", index: pool[Math.floor(Math.random()*pool.length)].i };
+  }
+
+  return null;
+}
+
+// ============ Sounds ============
+let _ctx=null;
+function actx(){ if(!_ctx){ const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null; _ctx=new AC(); } if(_ctx.state==="suspended") _ctx.resume(); return _ctx; }
+function blip(f,dur=120,type="sine",g=0.07){ const ac=actx(); if(!ac) return; const o=ac.createOscillator(); const gn=ac.createGain(); o.type=type; o.frequency.setValueAtTime(f,ac.currentTime); gn.gain.setValueAtTime(g,ac.currentTime); gn.gain.exponentialRampToValueAtTime(0.0001,ac.currentTime+dur/1000); o.connect(gn).connect(ac.destination); o.start(); o.stop(ac.currentTime+dur/1000); }
+const Sounds = {
+  click:()=>blip(620,70,"triangle",0.05),
+  flip:()=>{blip(420,90,"square",0.05); setTimeout(()=>blip(660,110,"sine",0.05),60);},
+  good:()=>{blip(523,110,"triangle",0.08); setTimeout(()=>blip(784,160,"triangle",0.08),90);},
+  bad:()=>{blip(220,180,"sawtooth",0.07); setTimeout(()=>blip(150,220,"sawtooth",0.06),100);},
+  assassin:()=>{blip(120,260,"sawtooth",0.1); setTimeout(()=>blip(90,360,"square",0.09),140);},
+  win:()=>{[523,659,784,1046].forEach((f,i)=>setTimeout(()=>blip(f,180,"triangle",0.08),i*110));},
+  turn:()=>blip(880,90,"sine",0.05),
+};
+
+// ============ Avatars ============
+const AVATARS=[
+  {icon:Compass,bg:"#4ecdc4"},{icon:Cat,bg:"#ff6b6b"},{icon:Bird,bg:"#ffe66d"},
+  {icon:Ghost,bg:"#c8b6ff"},{icon:Crown,bg:"#ffb86b"},{icon:Bug,bg:"#a0e548"},
+  {icon:Rocket,bg:"#4d96ff"},{icon:Star,bg:"#ff8fab"},{icon:Sparkles,bg:"#7ad7c0"},
+  {icon:Flame,bg:"#ffc24b"},{icon:Heart,bg:"#f4a6ff"},{icon:Zap,bg:"#9aa7b0"},
+];
+const avatarOf = (i)=> AVATARS[((i%AVATARS.length)+AVATARS.length)%AVATARS.length];
+
+// ============ Identity ============
+const ID_KEY="codenames_identity";
+const uuid = ()=> (crypto?.randomUUID?.() ?? ("p_"+Math.random().toString(36).slice(2)+Date.now().toString(36)));
+function getIdentity(){ try{ const r=localStorage.getItem(ID_KEY); return r?JSON.parse(r):null; }catch{return null;} }
+function saveIdentity(name, avatar){ const e=getIdentity(); const id={playerId:e?.playerId??uuid(), name, avatar}; localStorage.setItem(ID_KEY, JSON.stringify(id)); return id; }
+
+// ============ Room API ============
+function genCode(){ const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s=""; for(let i=0;i<5;i++) s+=c[Math.floor(Math.random()*c.length)]; return s; }
+async function createRoom(hostId, lang="ar"){
+  for(let i=0;i<6;i++){
+    const code=genCode();
+    const { error } = await supabase.from("rooms").insert({ code, state:createGame(lang), status:"lobby", host_id:hostId });
+    if(!error) return code;
+  }
+  throw new Error("Could not create room");
+}
+async function getRoom(code){ const {data}=await supabase.from("rooms").select("*").eq("code",code).maybeSingle(); return data??null; }
+async function joinRoomDB(code, playerId, name, avatar){ await supabase.from("room_players").upsert({room_code:code,player_id:playerId,name,avatar},{onConflict:"room_code,player_id"}); }
+async function leaveRoom(code, playerId){ await supabase.from("room_players").delete().eq("room_code",code).eq("player_id",playerId); }
+async function listPlayers(code){ const {data}=await supabase.from("room_players").select("*").eq("room_code",code).order("created_at",{ascending:true}); return data??[]; }
+async function setPlayerTeamRole(code, playerId, team, role){ await supabase.from("room_players").update({team,role}).eq("room_code",code).eq("player_id",playerId); }
+async function updateRoomState(code, state, status="playing"){ await supabase.from("rooms").update({state, status, updated_at:new Date().toISOString()}).eq("code",code); }
+
+// ============ Chat (broadcast) ============
+function joinChat(code, onMessage){
+  const channel = supabase.channel(`chat-${code}`, { config:{ broadcast:{ self:true } } });
+  channel.on("broadcast", { event:"msg" }, (p)=>{ const m=p.payload; if(m?.id) onMessage(m); });
+  channel.subscribe();
+  const send = (msg)=>{
+    const full={...msg, id:uuid(), created_at:new Date().toISOString(), text:msg.text.trim().slice(0,300)};
+    if(!full.text) return;
+    channel.send({type:"broadcast", event:"msg", payload:full});
+  };
+  return { channel, send };
+}
+
+// ============ Settings + i18n ============
+const AR = {appName:"كود نيمز",tagline:"لعبة الكلمات الجماعية الأشهر",heroDesc:"فريقان يتنافسان لاكتشاف عملائهما السريين على لوحة من ٢٥ كلمة. القائد يعطي تلميحاً بكلمة واحدة ورقم، والعملاء يخمّنون… واحذروا القاتل!",online:"غرفة أونلاين",local:"لعب محلي",howToPlay:"كيف تلعب؟",rules:"الشروط والقوانين",settings:"الإعدادات",language:"اللغة",theme:"المظهر",light:"فاتح",dark:"ليلي",sound:"الأصوات",on:"مُفعّل",off:"مُعطّل",close:"إغلاق",developer:"تطوير: سامي",back:"رجوع",home:"الرئيسية",newGame:"لعبة جديدة",exit:"خروج",red:"الفريق الأحمر",blue:"الفريق الأزرق",spymaster:"قائد",operative:"عميل",joinAsSpymaster:"انضم قائداً",joinAsOperative:"انضم عميلاً",spymasterView:"وضع القائد",operativeView:"وضع العملاء",roomCode:"رمز الغرفة — شاركه مع أصدقائك",copy:"نسخ الرابط",copied:"نُسخ",chooseTeam:"اختر فريقك ودورك",startGame:"ابدأ اللعبة",needMinPlayers:"يلزم لكل فريق قائد + عميل واحد على الأقل للبدء.",waitingHost:"بانتظار أن يبدأ مضيف الغرفة اللعبة...",noOneYet:"لا أحد بعد",yourClue:"تلميحك",oneWord:"كلمة واحدة...",send:"إرسال",waitingClue:"بانتظار تلميح قائد",clue:"التلميح",guessesLeft:"تخمين متبقٍ",endTurn:"إنهاء الدور",won:"فاز",gameLog:"سجل اللعبة",bots:"بوتات",easyBots:"بوتات سهلة",hardBots:"بوتات صعبة",whoAreYou:"من أنت؟",pickNameAvatar:"اختر اسماً وشخصية للانضمام إلى الغرفة",yourName:"اسمك...",letsGo:"انطلق",roomMissing:"هذه الغرفة غير موجودة أو انتهت.",createNewRoom:"أنشئ غرفة جديدة",loadingRoom:"جارٍ تحميل الغرفة...",creatingRoom:"جارٍ إنشاء غرفة جديدة...",chat:"الدردشة",typeMessage:"اكتب رسالة...",termsTitle:"الشروط والقوانين",termsIntro:"أهلاً بك في كود نيمز. باستخدامك لهذه المنصة فإنك توافق على الشروط التالية:",rule1Title:"الهدف من اللعبة",rule1:"هدف اللعبة هو أن يكشف فريقك جميع بطاقاته السرية قبل الفريق الخصم، وتجنّب بطاقة القاتل.",rule2Title:"الأدوار",rule2:"كل فريق يختار قائداً (Spymaster) واحداً يرى ألوان البطاقات، والباقي عملاء يخمّنون.",rule3Title:"التلميح",rule3:"القائد يعطي تلميحاً يتكوّن من كلمة واحدة فقط ورقم يدل على عدد البطاقات المرتبطة بها.",rule4Title:"التخمين",rule4:"العملاء يخمّنون البطاقات. تخمين صحيح يتابع الدور، خاطئ ينهيه. كشف بطاقة القاتل يعني الخسارة الفورية.",rule5Title:"الاستخدام السليم",rule5:"يُمنع التحرّش أو استخدام لغة مسيئة في الدردشة. يحقّ لنا إنهاء أي جلسة تخالف هذه القواعد.",rule6Title:"الخصوصية",rule6:"لا نحفظ أي بيانات شخصية. الأسماء والشخصيات المختارة تُحفظ محلياً على جهازك فقط، وتُحذف بيانات الغرف عند انتهائها.",difficulty:"صعوبة البوتات",joinRoom:"ادخل غرفة موجودة",pasteCode:"الصق رمز الغرفة هنا",enter:"دخول",invalidCode:"رمز غير صحيح (٥ أحرف)",yourTeam:"فريقك",botSpymaster:"قائد بوت معي",botSpymasterDesc:"قائد ذكي في فريقك يعطيك التلميحات.",clueRuleSingleWord:"التلميح يجب أن يكون كلمة واحدة فقط.",clueRuleNoBoardWord:"لا يجوز استخدام كلمة موجودة على اللوحة.",rulesShort:"تذكّر: كلمة واحدة فقط · لا تكشف القاتل · التزم بدورك.",assistant:"المساعد"};
+const EN = {appName:"Codenames",tagline:"The famous team word game",heroDesc:"Two teams race to find their secret agents on a board of 25 words. The spymaster gives a one-word clue and a number, and operatives guess… beware the assassin!",online:"Online Room",local:"Local Play",howToPlay:"How to play",rules:"Terms & Rules",settings:"Settings",language:"Language",theme:"Theme",light:"Light",dark:"Dark",sound:"Sounds",on:"On",off:"Off",close:"Close",developer:"Developed by Sami",back:"Back",home:"Home",newGame:"New Game",exit:"Exit",red:"Red Team",blue:"Blue Team",spymaster:"Spymaster",operative:"Operative",joinAsSpymaster:"Join as Spymaster",joinAsOperative:"Join as Operative",spymasterView:"Spymaster view",operativeView:"Operatives view",roomCode:"Room code — share it with your friends",copy:"Copy link",copied:"Copied",chooseTeam:"Pick your team and role",startGame:"Start Game",needMinPlayers:"Each team needs at least a spymaster and an operative to start.",waitingHost:"Waiting for the host to start the game...",noOneYet:"No one yet",yourClue:"Your clue",oneWord:"one word...",send:"Send",waitingClue:"Waiting for the spymaster of",clue:"Clue",guessesLeft:"guess(es) left",endTurn:"End turn",won:"won",gameLog:"Game log",bots:"Bots",easyBots:"Easy bots",hardBots:"Hard bots",whoAreYou:"Who are you?",pickNameAvatar:"Pick a name and avatar to join the room",yourName:"your name...",letsGo:"Let's go",roomMissing:"This room doesn't exist or has ended.",createNewRoom:"Create new room",loadingRoom:"Loading room...",creatingRoom:"Creating new room...",chat:"Chat",typeMessage:"Type a message...",termsTitle:"Terms & Rules",termsIntro:"Welcome to Codenames. By using this platform, you agree to the following:",rule1Title:"Goal",rule1:"Your team's goal is to reveal all its secret cards before the opposing team — and avoid the assassin card.",rule2Title:"Roles",rule2:"Each team picks one Spymaster who sees the card colors. The rest are Operatives who guess.",rule3Title:"The Clue",rule3:"The Spymaster gives a clue made of one word and a number indicating how many cards relate to it.",rule4Title:"Guessing",rule4:"Operatives guess cards. A correct guess lets them continue; a wrong one ends the turn. Hitting the assassin card means an instant loss.",rule5Title:"Fair Use",rule5:"Harassment or offensive language in chat is forbidden. We may end any session that breaks these rules.",rule6Title:"Privacy",rule6:"We don't store personal data. Names and avatars are kept locally on your device only, and room data is deleted when the room ends.",difficulty:"Bots difficulty",joinRoom:"Join an existing room",pasteCode:"Paste the room code",enter:"Enter",invalidCode:"Invalid code (5 chars)",yourTeam:"Your team",botSpymaster:"Bot spymaster on my team",botSpymasterDesc:"A smart bot spymaster gives clues for your team.",clueRuleSingleWord:"Clue must be a single word.",clueRuleNoBoardWord:"Clue cannot match any word on the board.",rulesShort:"Remember: one word only · don't hit the assassin · respect your turn.",assistant:"Assistant"};
+const DICTS = { ar:AR, en:EN };
+
+const SettingsCtx = createContext(null);
+function readLS(k,f){ try{ const v=localStorage.getItem(k); return v===null?f:JSON.parse(v); }catch{return f;} }
+function SettingsProvider({children}){
+  const [lang,setLang]=useState(()=>readLS("cn:lang","ar"));
+  const [theme,setTheme]=useState(()=>readLS("cn:theme","light"));
+  const [sound,setSound]=useState(()=>readLS("cn:sound",true));
+  useEffect(()=>{
+    document.documentElement.classList.toggle("dark", theme==="dark");
+    document.documentElement.setAttribute("lang",lang);
+    document.documentElement.setAttribute("dir", lang==="ar"?"rtl":"ltr");
+  },[theme,lang]);
+  const setLangP=(l)=>{setLang(l); localStorage.setItem("cn:lang",JSON.stringify(l));};
+  const setThemeP=(v)=>{setTheme(v); localStorage.setItem("cn:theme",JSON.stringify(v));};
+  const setSoundP=(v)=>{setSound(v); localStorage.setItem("cn:sound",JSON.stringify(v));};
+  const value = useMemo(()=>({
+    lang, theme, sound,
+    setLang:setLangP, setTheme:setThemeP, setSound:setSoundP,
+    t:(k)=> DICTS[lang][k] ?? DICTS.ar[k] ?? k,
+  }),[lang,theme,sound]);
+  return <SettingsCtx.Provider value={value}>{children}</SettingsCtx.Provider>;
+}
+const useSettings = ()=> useContext(SettingsCtx);
+
+// ============ Hash router ============
+function useHashRoute(){
+  const [hash,setHash] = useState(()=> window.location.hash || "#/");
+  useEffect(()=>{
+    const on = ()=> setHash(window.location.hash || "#/");
+    window.addEventListener("hashchange", on);
+    return ()=> window.removeEventListener("hashchange", on);
+  },[]);
+  const nav = (h, replace=false)=>{
+    if(replace) window.location.replace("#"+h);
+    else window.location.hash = h;
+  };
+  return [hash, nav];
+}
+function parseRoute(hash){
+  const h = hash.replace(/^#/, "");
+  if(h==="" || h==="/") return {name:"home"};
+  if(h==="/play") return {name:"play"};
+  if(h==="/terms") return {name:"terms"};
+  const m = h.match(/^\/room\/([^/]+)/);
+  if(m) return {name:"room", code: decodeURIComponent(m[1])};
+  return {name:"home"};
+}
+function Link({to, children, className, ...rest}){
+  const onClick=(e)=>{ e.preventDefault(); window.location.hash = to; };
+  return <a href={"#"+to} onClick={onClick} className={className} {...rest}>{children}</a>;
+}
+
+// ============ UI: Settings button ============
+function Segmented({value,onChange,options}){
+  return <div className="flex gap-2 rounded-xl border-2 border-border bg-background p-1">
+    {options.map(o=>(
+      <button key={String(o.value)} onClick={()=>onChange(o.value)} className={`flex-1 rounded-lg px-3 py-1.5 text-sm font-bold transition-colors ${value===o.value?"bg-primary text-primary-foreground":"text-foreground hover:bg-muted"}`}>{o.label}</button>
+    ))}
+  </div>;
+}
+function Section({icon,label,children}){
+  return <div className="mb-3"><div className="mb-1.5 flex items-center gap-2 text-sm font-bold text-muted-foreground">{icon} {label}</div>{children}</div>;
+}
+function SettingsButton(){
+  const [open,setOpen]=useState(false);
+  const { t, lang, setLang, theme, setTheme, sound, setSound } = useSettings();
+  return <>
+    <button onClick={()=>setOpen(true)} className="flex items-center justify-center rounded-xl bg-card px-3 py-2 font-bold border-b-4 border-border hover:border-primary" aria-label={t("settings")}><SettingsIcon className="h-4 w-4" /></button>
+    {open && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" onClick={()=>setOpen(false)}>
+      <div className="animate-pop w-full max-w-sm rounded-3xl border-2 border-border bg-card p-5 shadow-card" onClick={e=>e.stopPropagation()}>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="flex items-center gap-2 font-display text-2xl"><SettingsIcon className="h-5 w-5"/> {t("settings")}</h2>
+          <button onClick={()=>setOpen(false)} className="rounded-lg p-1 text-muted-foreground hover:bg-muted"><X className="h-5 w-5"/></button>
+        </div>
+        <Section icon={<Languages className="h-4 w-4"/>} label={t("language")}>
+          <Segmented value={lang} onChange={setLang} options={[{value:"ar",label:"العربية"},{value:"en",label:"English"}]}/>
+        </Section>
+        <Section icon={theme==="dark"?<Moon className="h-4 w-4"/>:<Sun className="h-4 w-4"/>} label={t("theme")}>
+          <Segmented value={theme} onChange={setTheme} options={[{value:"light",label:t("light")},{value:"dark",label:t("dark")}]}/>
+        </Section>
+        <Section icon={sound?<Volume2 className="h-4 w-4"/>:<VolumeX className="h-4 w-4"/>} label={t("sound")}>
+          <Segmented value={sound} onChange={setSound} options={[{value:true,label:t("on")},{value:false,label:t("off")}]}/>
+        </Section>
+        <button onClick={()=>setOpen(false)} className="mt-4 w-full rounded-xl bg-primary px-4 py-2 font-display text-primary-foreground border-b-4 border-[#d94f4f]">{t("close")}</button>
+      </div>
+    </div>}
+  </>;
+}
+
+// ============ Board ============
+const faceClasses = { red:"card-face card-face--red", blue:"card-face card-face--blue", neutral:"card-face card-face--neutral", assassin:"card-face card-face--assassin" };
+const spyTint = { red:"ring-team-red bg-team-red-soft", blue:"ring-team-blue bg-team-blue-soft", neutral:"ring-[#d8b878] bg-[#fbeccb]", assassin:"ring-black bg-[#3a3950] text-sunny" };
+
+function Card({card, spymasterView, canGuess, onClick}){
+  const clickable = canGuess && !card.revealed && !spymasterView;
+  return <div className="card-flip aspect-[5/4]">
+    <div className={`card-flip__inner ${card.revealed?"card-flip__inner--flipped":""}`}>
+      <button type="button" disabled={!clickable} onClick={onClick}
+        className={`card-flip__face card-front ${spymasterView?`ring-2 ring-inset ${spyTint[card.type]}`:""} ${clickable?"hover:-translate-y-1 active:translate-y-0.5 cursor-pointer card-front--hot":"cursor-default"}`} aria-label={card.word}>
+        <span className="card-front__corner card-front__corner--tl"><Shield className="h-3.5 w-3.5"/></span>
+        <span className="card-front__corner card-front__corner--br"><Shield className="h-3.5 w-3.5"/></span>
+        <span className="card-front__word">{card.word}</span>
+      </button>
+      <div className={`card-flip__face card-flip__face--back ${faceClasses[card.type]}`}>
+        {card.type==="assassin" ? <Skull className="h-8 w-8"/> : <span className="card-face__word">{card.word}</span>}
+      </div>
+    </div>
+  </div>;
+}
+
+function Board({state, spymasterView, canGuess, onReveal}){
+  const { sound } = useSettings();
+  const lastRev = useRef(state.cards.filter(c=>c.revealed).length);
+  useEffect(()=>{
+    const now = state.cards.filter(c=>c.revealed).length;
+    if(now>lastRev.current){
+      const last = [...state.cards].reverse().find(c=>c.revealed);
+      if(last){
+        if(last.type==="assassin"){ if(sound) Sounds.assassin(); window.__cnFx?.shake(); }
+        else if(sound){ if(last.type==="neutral") Sounds.bad(); else Sounds.good(); }
+      }
+    }
+    lastRev.current = now;
+  },[state.cards, sound]);
+  const prevWin = useRef(state.winner);
+  useEffect(()=>{ if(state.winner && state.winner!==prevWin.current){ if(sound) Sounds.win(); window.__cnFx?.confetti(); } prevWin.current=state.winner; },[state.winner, sound]);
+  return <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
+    {state.cards.map((c,i)=>(
+      <Card key={i} card={c} spymasterView={spymasterView} canGuess={canGuess}
+        onClick={()=>{ if(sound) Sounds.flip(); onReveal(i); }}/>
+    ))}
+  </div>;
+}
+
+function TeamPill({team, remaining, total, active}){
+  const { t } = useSettings();
+  return <div className={`flex flex-1 items-center justify-center gap-2 rounded-2xl border-b-4 px-3 py-2.5 font-display text-lg transition-all ${team==="red"?"bg-team-red text-team-red-foreground border-[#d94f4f]":"bg-team-blue text-team-blue-foreground border-[#3a78d6]"} ${active?"scale-105 shadow-pop":"opacity-70"}`}>
+    <span className="text-2xl font-black">{remaining}</span>
+    <span className="text-sm">/ {total}</span>
+    <span className="text-sm">{team==="red"?t("red"):t("blue")}</span>
+    {active && <Play className="h-4 w-4 animate-wiggle"/>}
+  </div>;
+}
+function ScoreHud({state}){
+  return <div className="flex gap-2 sm:gap-3">
+    <TeamPill team="red" remaining={state.redRemaining} total={state.redTotal} active={state.turn==="red"&&!state.winner}/>
+    <TeamPill team="blue" remaining={state.blueRemaining} total={state.blueTotal} active={state.turn==="blue"&&!state.winner}/>
+  </div>;
+}
+function GameLog({state}){
+  const { t } = useSettings();
+  if(state.log.length===0) return null;
+  return <div className="rounded-2xl border-2 border-border bg-card/80 p-3 sm:p-4">
+    <h2 className="mb-2 flex items-center gap-2 font-display text-base"><ScrollText className="h-4 w-4"/> {t("gameLog")}</h2>
+    <ul className="max-h-44 space-y-1.5 overflow-y-auto pl-1 text-sm">
+      {state.log.map((e,i)=>(
+        <li key={i} className={`rounded-lg px-2 py-1 ${e.team==="red"?"bg-team-red-soft":e.team==="blue"?"bg-team-blue-soft":"bg-muted"}`}>{e.text}</li>
+      ))}
+    </ul>
+  </div>;
+}
+
+// ============ ClueBar ============
+function ClueBar({state, isSpymaster, myTeamTurn, onClue, onEndTurn}){
+  const { t } = useSettings();
+  const [word,setWord]=useState(""); const [count,setCount]=useState(1); const [err,setErr]=useState("");
+  if(state.winner) return null;
+  const submit=()=>{
+    const w=word.trim(); if(!w) return;
+    if(/\s/.test(w)){ setErr(t("clueRuleSingleWord")); return; }
+    const norm=w.toLowerCase();
+    if(state.cards.some(c=>c.word.toLowerCase()===norm)){ setErr(t("clueRuleNoBoardWord")); return; }
+    setErr(""); onClue(w,count); setWord(""); setCount(1);
+  };
+  if(state.phase==="clue"){
+    if(isSpymaster && myTeamTurn){
+      return <div className="rounded-2xl border-2 border-border bg-card p-3 shadow-card">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="flex items-center gap-1 font-display text-base"><Brain className="h-5 w-5"/> {t("yourClue")}:</span>
+          <input value={word} onChange={e=>{setWord(e.target.value);setErr("");}} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder={t("oneWord")} className="min-w-0 flex-1 rounded-xl border-2 border-border bg-background px-3 py-2 font-bold outline-none focus:border-primary"/>
+          <select value={count} onChange={e=>setCount(Number(e.target.value))} className="rounded-xl border-2 border-border bg-background px-3 py-2 font-bold outline-none focus:border-primary">
+            {Array.from({length:9},(_,i)=>i+1).map(n=><option key={n} value={n}>{n}</option>)}
+          </select>
+          <button onClick={submit} className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2 font-display text-base text-primary-foreground border-b-4 border-[#d94f4f] active:translate-y-0.5">{t("send")} <Send className="h-4 w-4"/></button>
+        </div>
+        {err && <p className="mt-2 text-sm font-bold text-destructive">{err}</p>}
+      </div>;
+    }
+    return <div className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card/70 p-4 text-center font-display text-base text-muted-foreground">
+      <Hourglass className="h-5 w-5 animate-wiggle"/> {t("waitingClue")} {state.turn==="red"?t("red"):t("blue")}...
+    </div>;
+  }
+  return <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 border-border bg-card p-3 shadow-card">
+    <div className="flex items-center gap-2">
+      <Megaphone className="h-5 w-5"/>
+      <span className="font-display text-lg">{t("clue")}:</span>
+      <span className="rounded-xl bg-accent px-3 py-1 font-display text-lg text-accent-foreground">{state.clue?.word} — {state.clue?.count}</span>
+      <span className="text-sm font-bold text-muted-foreground">({Math.max(state.guessesLeft,0)} {t("guessesLeft")})</span>
+    </div>
+    {!isSpymaster && myTeamTurn && (
+      <button onClick={onEndTurn} className="flex items-center gap-2 rounded-xl bg-secondary px-4 py-2 font-display text-base text-secondary-foreground border-b-4 border-[#39b3aa] active:translate-y-0.5">{t("endTurn")} <SkipForward className="h-4 w-4"/></button>
+    )}
+  </div>;
+}
+
+// ============ RoomChat ============
+function RoomChat({code, playerId, name, avatar}){
+  const { t } = useSettings();
+  const [messages,setMessages]=useState([]); const [text,setText]=useState("");
+  const scroll = useRef(null); const sendRef=useRef(null);
+  useEffect(()=>{
+    const {channel, send} = joinChat(code, (m)=> setMessages(prev=> prev.some(p=>p.id===m.id) ? prev : [...prev,m]));
+    sendRef.current=send;
+    return ()=>{ supabase.removeChannel(channel); };
+  },[code]);
+  useEffect(()=>{ scroll.current?.scrollTo({top:scroll.current.scrollHeight, behavior:"smooth"}); },[messages]);
+  const submit=()=>{ if(!text.trim()||!sendRef.current) return; sendRef.current({player_id:playerId,name,avatar,text}); setText(""); };
+  return <div className="flex h-72 flex-col overflow-hidden rounded-2xl border-2 border-border bg-card">
+    <div className="flex items-center gap-2 border-b-2 border-border bg-muted px-3 py-2 font-display text-sm"><MessagesSquare className="h-4 w-4"/> {t("chat")}</div>
+    <div ref={scroll} className="flex-1 space-y-2 overflow-y-auto p-3 text-sm">
+      {messages.length===0 && <p className="text-center text-xs text-muted-foreground">—</p>}
+      {messages.map(m=>{
+        const av=avatarOf(m.avatar); const Icon=av.icon; const mine=m.player_id===playerId;
+        return <div key={m.id} className={`flex items-end gap-2 ${mine?"flex-row-reverse":""}`}>
+          <span style={{background:av.bg}} className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-white"><Icon className="h-4 w-4"/></span>
+          <div className={`max-w-[75%] rounded-2xl px-3 py-1.5 ${mine?"bg-primary text-primary-foreground":"bg-muted text-foreground"}`}>
+            {!mine && <div className="text-[10px] font-bold opacity-70">{m.name}</div>}
+            <div className="break-words">{m.text}</div>
+          </div>
+        </div>;
+      })}
+    </div>
+    <div className="flex items-center gap-2 border-t-2 border-border p-2">
+      <input value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>e.key==="Enter"&&submit()} placeholder={t("typeMessage")} maxLength={300} className="min-w-0 flex-1 rounded-xl border-2 border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"/>
+      <button onClick={submit} className="flex items-center justify-center rounded-xl bg-primary px-3 py-2 text-primary-foreground"><Send className="h-4 w-4"/></button>
+    </div>
+  </div>;
+}
+
+// ============ Landing ============
+function Landing(){
+  const { t, lang } = useSettings();
+  const [code,setCode]=useState(""); const [err,setErr]=useState(false);
+  const submit=(e)=>{ e.preventDefault(); const c=code.trim().toUpperCase(); if(!/^[A-Z2-9]{5}$/.test(c)){setErr(true);return;} setErr(false); window.location.hash=`/room/${c}`; };
+  return <div className="relative mx-auto flex min-h-screen max-w-5xl flex-col px-5 pb-16 pt-6">
+    <header className="mb-4 flex items-center justify-between">
+      <Link to="/" className="flex items-center gap-2 font-display text-2xl">
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground"><Brain className="h-5 w-5"/></span>
+        <span className="text-primary">{t("appName")}</span>
+      </Link>
+      <SettingsButton/>
+    </header>
+    <section className="flex flex-col items-center text-center">
+      <div className="animate-float flex h-32 w-32 sm:h-40 sm:w-40 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-pop-lg"><Brain className="h-20 w-20 sm:h-24 sm:w-24"/></div>
+      <span className="mt-2 rounded-full border-2 border-border bg-card px-4 py-1 font-bold text-muted-foreground shadow-pop">{t("tagline")}</span>
+      <h1 className="mt-4 font-display text-6xl text-stroke sm:text-8xl">
+        {lang==="ar" ? <>كود <span className="text-primary">نيمز</span></> : <>Code<span className="text-primary">names</span></>}
+      </h1>
+      <p className="mt-4 max-w-xl text-lg text-foreground/80">{t("heroDesc")}</p>
+      <div className="mt-8 flex w-full max-w-md flex-col gap-3 sm:flex-row">
+        <Link to="/room/new" className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-4 font-display text-xl text-primary-foreground border-b-4 border-[#d94f4f] shadow-pop transition-transform hover:scale-105 active:translate-y-1"><Globe className="h-6 w-6"/> {t("online")}</Link>
+        <Link to="/play" className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-secondary px-6 py-4 font-display text-xl text-secondary-foreground border-b-4 border-[#39b3aa] shadow-pop transition-transform hover:scale-105 active:translate-y-1"><Gamepad2 className="h-6 w-6"/> {t("local")}</Link>
+      </div>
+    </section>
+    <section className="mt-10 flex flex-col items-center rounded-3xl border-2 border-border bg-card p-6 shadow-pop">
+      <h2 className="flex items-center gap-2 font-display text-2xl"><KeyRound className="h-6 w-6 text-primary"/> {t("joinRoom")}</h2>
+      <p className="mt-1 text-sm text-muted-foreground">{t("pasteCode")}</p>
+      <form onSubmit={submit} className="mt-5 flex w-full max-w-md flex-col gap-2 sm:flex-row">
+        <div className="relative flex-1">
+          <KeyRound className="pointer-events-none absolute start-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground"/>
+          <input value={code} onChange={e=>{setCode(e.target.value.toUpperCase()); setErr(false);}} maxLength={5} placeholder={t("pasteCode")} className={`w-full rounded-2xl border-2 bg-card px-10 py-3 text-center font-display text-2xl tracking-[0.4em] outline-none focus:border-primary ${err?"border-destructive":"border-border"}`} dir="ltr" aria-label={t("pasteCode")}/>
+        </div>
+        <button type="submit" className="rounded-2xl bg-accent px-5 py-3 font-display text-lg text-accent-foreground border-b-4 border-[#d8c24b] shadow-pop active:translate-y-0.5">{t("enter")}</button>
+      </form>
+      {err && <p className="mt-2 text-sm text-destructive">{t("invalidCode")}</p>}
+    </section>
+    <section className="mt-12 grid w-full gap-4 sm:grid-cols-3">
+      {[
+        {Icon:Users, t:t("online"), d:lang==="ar"?"ادعُ أصدقاءك برمز الغرفة والعبوا لحظياً.":"Invite friends with a room code and play live."},
+        {Icon:ShieldCheck, t:t("bots"), d:lang==="ar"?"العب محلياً ضد بوتات بمستويين من الصعوبة.":"Play locally against bots with two difficulty levels."},
+        {Icon:Brain, t:t("assistant"), d:lang==="ar"?"قواعد بسيطة ولعب سريع.":"Simple rules, fast play."},
+      ].map(f=>(
+        <div key={f.t} className="rounded-3xl border-2 border-border bg-card p-5 text-center shadow-pop">
+          <f.Icon className="mx-auto h-10 w-10 text-primary"/>
+          <div className="mt-2 font-display text-xl">{f.t}</div>
+          <div className="mt-1 text-sm text-muted-foreground">{f.d}</div>
+        </div>
+      ))}
+    </section>
+    <section className="mt-12 w-full rounded-3xl border-2 border-border bg-card p-6 shadow-pop">
+      <h2 className="mb-4 flex items-center justify-center gap-2 font-display text-2xl"><BookOpen className="h-6 w-6"/> {t("howToPlay")}</h2>
+      <ol className="mx-auto max-w-2xl space-y-3 text-foreground/85">
+        {[t("rule1"),t("rule2"),t("rule3"),t("rule4")].map((step,i)=>(
+          <li key={i} className="flex gap-3">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent font-display text-accent-foreground">{i+1}</span>
+            <span>{step}</span>
+          </li>
+        ))}
+      </ol>
+      <div className="mt-5 text-center">
+        <Link to="/terms" className="inline-flex items-center gap-1 text-primary hover:underline">{t("rules")} <ArrowRight className="h-4 w-4"/></Link>
+      </div>
+    </section>
+    <footer className="mt-14 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+      <Sparkles className="h-4 w-4 text-primary"/><span>{t("developer")}</span>
+    </footer>
+  </div>;
+}
+
+// ============ Terms ============
+function TermsPage(){
+  const { t } = useSettings();
+  const rules = [1,2,3,4,5,6].map(i=>({title:t(`rule${i}Title`), body:t(`rule${i}`)}));
+  return <div className="mx-auto max-w-3xl px-5 py-8">
+    <Link to="/" className="mb-6 inline-flex items-center gap-2 font-bold text-primary hover:underline"><ArrowLeft className="h-4 w-4"/> {t("home")}</Link>
+    <h1 className="font-display text-4xl sm:text-5xl">{t("termsTitle")}</h1>
+    <p className="mt-3 text-muted-foreground">{t("termsIntro")}</p>
+    <div className="mt-6 space-y-4">
+      {rules.map((r,i)=>(
+        <section key={i} className="rounded-2xl border-2 border-border bg-card p-5 shadow-pop">
+          <h2 className="mb-2 font-display text-xl">{i+1}. {r.title}</h2>
+          <p className="text-foreground/85">{r.body}</p>
+        </section>
+      ))}
+    </div>
+    <p className="mt-8 text-center text-sm text-muted-foreground">{t("developer")}</p>
+  </div>;
+}
+
+// ============ Local Play ============
+function PlayLocal(){
+  const { t, lang, sound } = useSettings();
+  const [state,setState]=useState(()=>createGame(lang));
+  const [difficulty,setDifficulty]=useState("hard");
+  const [myTeam,setMyTeam]=useState("red");
+  // The bot is ALWAYS the user's spymaster in local play — the user only ever
+  // plays as an operative. The spymaster ("spy") view is never exposed, so the
+  // player cannot peek at the solution.
+  const botMate = true;
+  const spy = false;
+  const opponent = myTeam==="red"?"blue":"red";
+  const actorIsBot = (s)=>{ if(s.winner) return false; if(s.turn===opponent) return true; if(s.phase==="clue") return botMate; return false; };
+  const stateRef=useRef(state); stateRef.current=state;
+  useEffect(()=>{
+    if(!actorIsBot(state)) return;
+    const t=setTimeout(()=>{
+      const cur=stateRef.current; const a=botAction(cur,cur.turn,difficulty);
+      if(!a) return;
+      if(a.type==="clue") setState(s=>giveClue(s,a.word,a.count));
+      else if(a.type==="guess") setState(s=>revealCard(s,a.index));
+      else if(a.type==="end"){ setState(s=>endTurn(s)); if(sound) Sounds.turn(); }
+    },900);
+    return ()=>clearTimeout(t);
+  },[state,difficulty,myTeam,sound]);
+  useEffect(()=>{ setState(createGame(lang)); },[lang]);
+  const newGame=()=>{ setState(createGame(lang)); };
+  const myTeamTurn = state.turn===myTeam;
+  const humanIsSpymaster = false; // user can never be spymaster locally
+  const humanIsOperative = state.phase==="guess" && myTeamTurn;
+  return <div className="mx-auto max-w-4xl px-4 py-5">
+    <header className="mb-4 flex items-center justify-between gap-2">
+      <Link to="/" className="flex items-center gap-1 font-display text-2xl text-primary"><Home className="h-5 w-5"/> {t("appName")}</Link>
+      <div className="flex flex-wrap items-center gap-2">
+        <SettingsButton/>
+        <button onClick={newGame} className="flex items-center gap-1.5 rounded-xl bg-primary px-3 py-2 font-display text-sm text-primary-foreground border-b-4 border-[#d94f4f] active:translate-y-0.5"><RefreshCw className="h-4 w-4"/> {t("newGame")}</button>
+      </div>
+    </header>
+    <div className="mb-4 grid gap-3 rounded-2xl border-2 border-border bg-card p-3 shadow-card sm:grid-cols-2">
+      <label className="flex flex-col gap-1 text-sm">
+        <span className="flex items-center gap-1 font-bold"><Users className="h-4 w-4"/> {t("yourTeam")}</span>
+        <div className="flex gap-2">
+          {["red","blue"].map(tt=>(
+            <button key={tt} onClick={()=>setMyTeam(tt)} className={`flex-1 rounded-xl border-b-4 px-3 py-2 font-display text-sm transition ${myTeam===tt?(tt==="red"?"bg-team-red text-team-red-foreground border-[#d94f4f]":"bg-team-blue text-team-blue-foreground border-[#3a78d6]"):"bg-background border-border text-foreground/70"}`}>{tt==="red"?t("red"):t("blue")}</button>
+          ))}
+        </div>
+      </label>
+      <label className="flex flex-col gap-1 text-sm">
+        <span className="font-bold">{t("difficulty")}</span>
+        <select value={difficulty} onChange={e=>setDifficulty(e.target.value)} className="rounded-xl border-2 border-border bg-background px-3 py-2 font-bold">
+          <option value="easy">{t("easyBots")}</option>
+          <option value="hard">{t("hardBots")}</option>
+        </select>
+      </label>
+    </div>
+    <div className="mb-3 flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card/70 px-3 py-2 text-sm text-muted-foreground"><Bot className="h-4 w-4"/> {t("botSpymasterDesc")}</div>
+    <ScoreHud state={state}/>
+    {state.winner && <div className={`my-3 animate-pop flex items-center justify-center gap-2 rounded-2xl border-b-4 p-4 text-center font-display text-2xl ${state.winner==="red"?"bg-team-red text-team-red-foreground border-[#d94f4f]":"bg-team-blue text-team-blue-foreground border-[#3a78d6]"}`}><Trophy className="h-7 w-7"/> {t("won")} {state.winner==="red"?t("red"):t("blue")}!</div>}
+    <div className="my-3">
+      <ClueBar state={state} isSpymaster={humanIsSpymaster} myTeamTurn={myTeamTurn}
+        onClue={(w,c)=>setState(s=>giveClue(s,w,c))} onEndTurn={()=>setState(s=>endTurn(s))}/>
+    </div>
+    <Board state={state} spymasterView={false} canGuess={humanIsOperative} onReveal={(i)=>setState(s=>revealCard(s,i))}/>
+    <p className="mt-3 text-center text-xs text-muted-foreground">{t("rulesShort")}</p>
+    <div className="mt-4"><GameLog state={state}/></div>
+    <p className="mt-3 text-center text-xs text-muted-foreground">{t("developer")}</p>
+  </div>;
+}
+
+// ============ Room (identity + lobby + game) ============
+function Centered({children}){ return <div className="flex min-h-screen items-center justify-center px-6 text-center font-display text-2xl">{children}</div>; }
+
+function IdentityGate({onReady}){
+  const { t } = useSettings();
+  const existing = getIdentity();
+  const [name,setName]=useState(existing?.name??"");
+  const [avatar,setAvatar]=useState(existing?.avatar??0);
+  const Av = avatarOf(avatar).icon;
+  return <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-6 text-center">
+    <div style={{background:avatarOf(avatar).bg}} className="animate-float flex h-20 w-20 items-center justify-center rounded-3xl text-white shadow-pop"><Av className="h-10 w-10"/></div>
+    <h1 className="mt-3 font-display text-4xl">{t("whoAreYou")}</h1>
+    <p className="mt-1 text-muted-foreground">{t("pickNameAvatar")}</p>
+    <input value={name} onChange={e=>setName(e.target.value)} placeholder={t("yourName")} maxLength={16} className="mt-5 w-full rounded-2xl border-2 border-border bg-card px-4 py-3 text-center font-bold outline-none focus:border-primary"/>
+    <div className="mt-4 grid grid-cols-6 gap-2">
+      {AVATARS.map((a,i)=>{ const Icon=a.icon; return (
+        <button key={i} onClick={()=>setAvatar(i)} style={{background:a.bg}} className={`flex h-12 w-12 items-center justify-center rounded-2xl text-white transition-transform ${avatar===i?"scale-110 ring-4 ring-foreground/30":"opacity-80 hover:scale-105"}`}><Icon className="h-6 w-6"/></button>
+      ); })}
+    </div>
+    <button disabled={!name.trim()} onClick={()=>onReady(saveIdentity(name.trim(),avatar))} className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 font-display text-xl text-primary-foreground border-b-4 border-[#d94f4f] disabled:opacity-50 active:translate-y-1">{t("letsGo")} <Play className="h-5 w-5"/></button>
+  </div>;
+}
+
+function Lobby({code, room, players, me, isHost, onTeamRole, onStart, onLeave, identity}){
+  const { t } = useSettings();
+  const [copied,setCopied]=useState(false);
+  const teamPlayers = team => players.filter(p=>p.team===team);
+  const hasSpy = team => teamPlayers(team).some(p=>p.role==="spymaster");
+  const canStart = hasSpy("red") && hasSpy("blue") && teamPlayers("red").length>=2 && teamPlayers("blue").length>=2;
+  const copy = ()=>{ navigator.clipboard?.writeText(window.location.href); setCopied(true); setTimeout(()=>setCopied(false),1500); };
+  return <div className="mx-auto max-w-3xl px-4 py-6">
+    <header className="mb-4 flex items-center justify-between gap-2">
+      <Link to="/" className="flex items-center gap-1 font-display text-2xl text-primary"><Home className="h-5 w-5"/> {t("appName")}</Link>
+      <div className="flex items-center gap-2">
+        <SettingsButton/>
+        <button onClick={onLeave} className="flex items-center gap-1 rounded-xl bg-card px-3 py-2 text-sm font-bold border-b-4 border-border"><LogOut className="h-4 w-4"/> {t("exit")}</button>
+      </div>
+    </header>
+    <div className="rounded-3xl border-2 border-border bg-card p-5 text-center shadow-pop">
+      <p className="text-muted-foreground">{t("roomCode")}</p>
+      <div className="mt-1 flex items-center justify-center gap-3">
+        <span className="font-display text-5xl tracking-[0.3em]">{code}</span>
+        <button onClick={copy} className="flex items-center gap-1 rounded-xl bg-secondary px-3 py-2 text-sm font-bold text-secondary-foreground border-b-4 border-[#39b3aa]">
+          {copied?<><Check className="h-4 w-4"/> {t("copied")}</>:<><Copy className="h-4 w-4"/> {t("copy")}</>}
+        </button>
+      </div>
+    </div>
+    <h2 className="mt-6 mb-2 text-center font-display text-2xl">{t("chooseTeam")}</h2>
+    <div className="grid gap-4 sm:grid-cols-2">
+      {["red","blue"].map(team=>(
+        <div key={team} className={`rounded-3xl border-2 p-4 ${team==="red"?"border-team-red bg-team-red-soft":"border-team-blue bg-team-blue-soft"}`}>
+          <h3 className="mb-3 text-center font-display text-xl">{team==="red"?t("red"):t("blue")}</h3>
+          <div className="space-y-2">
+            {teamPlayers(team).map(p=>{ const av=avatarOf(p.avatar); const Icon=av.icon; return (
+              <div key={p.id} className="flex items-center gap-2 rounded-xl bg-card/80 px-3 py-2">
+                <span style={{background:av.bg}} className="flex h-8 w-8 items-center justify-center rounded-lg text-white"><Icon className="h-4 w-4"/></span>
+                <span className="font-bold">{p.name}</span>
+                <span className="ms-auto text-sm">{p.role==="spymaster"?t("spymaster"):t("operative")}</span>
+              </div>
+            ); })}
+            {teamPlayers(team).length===0 && <p className="py-2 text-center text-sm text-muted-foreground">{t("noOneYet")}</p>}
+          </div>
+          <div className="mt-3 flex gap-2">
+            <button onClick={()=>onTeamRole(team,"spymaster")} disabled={!!me && me.team===team && me.role==="spymaster"} className="flex-1 rounded-xl bg-card px-3 py-2 text-sm font-bold border-b-4 border-border disabled:opacity-50">{t("joinAsSpymaster")}</button>
+            <button onClick={()=>onTeamRole(team,"operative")} disabled={!!me && me.team===team && me.role==="operative"} className="flex-1 rounded-xl bg-card px-3 py-2 text-sm font-bold border-b-4 border-border disabled:opacity-50">{t("joinAsOperative")}</button>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div className="mt-6"><RoomChat code={code} playerId={identity.playerId} name={identity.name} avatar={identity.avatar}/></div>
+    <div className="mt-6 text-center">
+      {isHost ? <>
+        <button onClick={onStart} disabled={!canStart} className="inline-flex items-center gap-2 rounded-2xl bg-primary px-10 py-4 font-display text-xl text-primary-foreground border-b-4 border-[#d94f4f] disabled:opacity-50 active:translate-y-1"><Play className="h-5 w-5"/> {t("startGame")}</button>
+        {!canStart && <p className="mt-2 text-sm text-muted-foreground">{t("needMinPlayers")}</p>}
+      </> : <p className="font-display text-lg text-muted-foreground">{t("waitingHost")}</p>}
+    </div>
+    <p className="mt-6 text-center text-xs text-muted-foreground">{t("developer")}</p>
+  </div>;
+}
+
+function PlayOnline({code, room, me, isHost, onBackToLobby, onLeave, identity}){
+  const { t } = useSettings();
+  const state = room.state;
+  const isSpymaster = me?.role==="spymaster";
+  const myTeamTurn = !!me?.team && me.team===state.turn;
+  const push = (next)=>{ updateRoomState(code,next,"playing"); };
+  const meAv = me?avatarOf(me.avatar):null; const MeIcon = meAv?.icon;
+  return <div className="mx-auto max-w-4xl px-4 py-5">
+    <header className="mb-3 flex flex-wrap items-center justify-between gap-2">
+      <Link to="/" className="flex items-center gap-1 font-display text-xl text-primary"><Home className="h-5 w-5"/> {t("appName")}</Link>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        {me && MeIcon && <span className="flex items-center gap-1 rounded-xl bg-card px-2 py-1 font-bold border-b-4 border-border">
+          <span style={{background:meAv.bg}} className="flex h-6 w-6 items-center justify-center rounded text-white"><MeIcon className="h-3.5 w-3.5"/></span>
+          {me.name} · {me.role==="spymaster"?t("spymaster"):t("operative")} · {me.team==="red"?t("red"):me.team==="blue"?t("blue"):""}
+        </span>}
+        {isHost && state.winner && <button onClick={onBackToLobby} className="flex items-center gap-1 rounded-xl bg-secondary px-3 py-2 font-bold text-secondary-foreground border-b-4 border-[#39b3aa]"><RefreshCw className="h-4 w-4"/> {t("newGame")}</button>}
+        <SettingsButton/>
+        <button onClick={onLeave} className="flex items-center gap-1 rounded-xl bg-card px-3 py-2 font-bold border-b-4 border-border"><LogOut className="h-4 w-4"/> {t("exit")}</button>
+      </div>
+    </header>
+    <ScoreHud state={state}/>
+    {state.winner && <div className={`my-3 animate-pop flex items-center justify-center gap-2 rounded-2xl border-b-4 p-4 text-center font-display text-2xl ${state.winner==="red"?"bg-team-red text-team-red-foreground border-[#d94f4f]":"bg-team-blue text-team-blue-foreground border-[#3a78d6]"}`}><Trophy className="h-7 w-7"/> {t("won")} {state.winner==="red"?t("red"):t("blue")}!</div>}
+    <div className="my-3"><ClueBar state={state} isSpymaster={!!isSpymaster} myTeamTurn={myTeamTurn} onClue={(w,c)=>push(giveClue(state,w,c))} onEndTurn={()=>push(endTurn(state))}/></div>
+    <div className="grid gap-4 lg:grid-cols-[1fr_20rem]">
+      <div>
+        <Board state={state} spymasterView={!!isSpymaster} canGuess={!isSpymaster && myTeamTurn && state.phase==="guess"} onReveal={(i)=>push(revealCard(state,i))}/>
+        <div className="mt-4"><GameLog state={state}/></div>
+      </div>
+      <aside><RoomChat code={code} playerId={identity.playerId} name={identity.name} avatar={identity.avatar}/></aside>
+    </div>
+    <p className="mt-4 text-center text-xs text-muted-foreground">{t("developer")}</p>
+  </div>;
+}
+
+function RoomInner({code, identity}){
+  const { t, lang } = useSettings();
+  const [room,setRoom]=useState(null); const [players,setPlayers]=useState([]); const [missing,setMissing]=useState(false);
+  const joined = useRef(false);
+  const refreshPlayers = useCallback(()=>{ listPlayers(code).then(setPlayers); },[code]);
+  useEffect(()=>{
+    let active=true;
+    (async()=>{
+      const r = await getRoom(code);
+      if(!active) return;
+      if(!r){ setMissing(true); return; }
+      setRoom(r);
+      if(!joined.current){ joined.current=true; await joinRoomDB(code, identity.playerId, identity.name, identity.avatar); }
+      refreshPlayers();
+    })();
+    return ()=>{ active=false; };
+  },[code, identity, refreshPlayers]);
+  useEffect(()=>{
+    const ch = supabase.channel(`room-${code}`)
+      .on("postgres_changes",{event:"*",schema:"public",table:"rooms",filter:`code=eq.${code}`},(p)=>{
+        if(p.eventType==="DELETE") setMissing(true); else setRoom(p.new);
+      })
+      .on("postgres_changes",{event:"*",schema:"public",table:"room_players",filter:`room_code=eq.${code}`}, refreshPlayers)
+      .subscribe();
+    return ()=>{ supabase.removeChannel(ch); };
+  },[code, refreshPlayers]);
+  useEffect(()=>{
+    const on = ()=> leaveRoom(code, identity.playerId);
+    window.addEventListener("beforeunload", on);
+    return ()=> window.removeEventListener("beforeunload", on);
+  },[code, identity.playerId]);
+  if(missing) return <Centered><div>
+    <LogOut className="mx-auto h-12 w-12 text-muted-foreground"/>
+    <p className="mt-3">{t("roomMissing")}</p>
+    <Link to="/room/new" className="mt-4 inline-block rounded-2xl bg-primary px-6 py-3 text-lg text-primary-foreground border-b-4 border-[#d94f4f]">{t("createNewRoom")}</Link>
+  </div></Centered>;
+  if(!room) return <Centered>{t("loadingRoom")}</Centered>;
+  const me = players.find(p=>p.player_id===identity.playerId);
+  const isHost = room.host_id===identity.playerId;
+  const leaveAndHome = async ()=>{ await leaveRoom(code, identity.playerId); window.location.hash="/"; };
+  if(room.status==="lobby"){
+    return <Lobby code={code} room={room} players={players} me={me} isHost={isHost}
+      onTeamRole={(team,role)=> setPlayerTeamRole(code, identity.playerId, team, role).then(refreshPlayers)}
+      onStart={()=> updateRoomState(code, createGame(lang), "playing")}
+      onLeave={leaveAndHome} identity={identity}/>;
+  }
+  return <PlayOnline code={code} room={room} me={me} isHost={isHost}
+    onBackToLobby={()=> updateRoomState(code, room.state, "lobby")}
+    onLeave={leaveAndHome} identity={identity}/>;
+}
+
+function RoomPage({code}){
+  const { t, lang } = useSettings();
+  const [identity,setIdentity]=useState(()=>getIdentity());
+  const [creating,setCreating]=useState(false);
+  useEffect(()=>{
+    if(code!=="new" || !identity || creating) return;
+    setCreating(true);
+    createRoom(identity.playerId, lang)
+      .then(nc=>{ window.location.replace(`#/room/${nc}`); })
+      .catch(()=> setCreating(false));
+  },[code, identity, creating, lang]);
+  if(!identity) return <IdentityGate onReady={setIdentity}/>;
+  if(code==="new") return <Centered>{t("creatingRoom")}</Centered>;
+  return <RoomInner code={code} identity={identity}/>;
+}
+
+// ============ Router root ============
+function App(){
+  const [hash] = useHashRoute();
+  const route = parseRoute(hash);
+  // scroll top on route change
+  useEffect(()=>{ window.scrollTo(0,0); },[hash]);
+  if(route.name==="home") return <Landing/>;
+  if(route.name==="play") return <PlayLocal/>;
+  if(route.name==="terms") return <TermsPage/>;
+  if(route.name==="room") return <RoomPage code={route.code}/>;
+  return <Landing/>;
+}
+
+createRoot(document.getElementById('root')).render(
+  <SettingsProvider><App/></SettingsProvider>
+);
+</script>
+</body>
+</html>
